@@ -17,10 +17,9 @@ const config = {
 
    game = new Phaser.Game(config);
 })// fim load listener
-let dude,cursors,ball0,ball1,ball2,ball3,ball4,ball5,ball6,ball7,ball8,ball9,ball10,ball11,ball12,ball13,
-ball14,ball15,ball16,ball17,ball18,ball19,ball20,ball21,ball22,ball23,ball24,ball25,ball26,ball27,
-ball28,ball29,ball30,ball31,ball32,ball33,ball34, player, ball, alvo0, alvo1, alvo2,alvo3,alvo4,alvo5,alvo6,texto
+let dude,cursors, player, ball, alvo0, alvo1, alvo2,alvo3,texto,texto1,texto2
 let inicioDeJogo = false;
+
 
 class Scene0 extends Phaser.Scene {
    constructor(){
@@ -38,7 +37,7 @@ class Scene0 extends Phaser.Scene {
        this.scene.start('scene1') )
  }// fim create
                
-}//fim Scene1
+}//fim Scene0
 
 class Scene1 extends Phaser.Scene{
    constructor(){
@@ -59,7 +58,7 @@ class Scene1 extends Phaser.Scene{
     
    }//fim create
   
-}//fim Scene2
+}//fim Scene1
 
 class Scene2 extends Phaser.Scene{
    constructor(){
@@ -78,7 +77,7 @@ class Scene2 extends Phaser.Scene{
        
        
    }//fim create
-}//fim Scene3
+}//fim Scene2
 
 class Scene3 extends Phaser.Scene{
    constructor(){
@@ -88,19 +87,21 @@ class Scene3 extends Phaser.Scene{
     preload() { 
 
   this.load.image('fundo', 'assets/Foto3.png');
+  
   this.load.image('bolinhaVermelha0', 'assets/ball/ball0copia.png');
   this.load.image('bolinhaVermelha1', 'assets/ball/ball1copia.png');
   this.load.image('bolinhaVermelha2', 'assets/ball/ball2copia.png');
   this.load.image('bolinhaVermelha3', 'assets/ball/ball3copia.png');
-  this.load.image('bolinhaVermelha4', 'assets/ball/ball4copia.png');
-  this.load.image('bolinhaVermelha5', 'assets/ball/ball5copia.png');
-  this.load.image('bolinhaVermelha6', 'assets/ball/ball6copia.png');
+ 
+  
+  
   this.load.image('ball', 'assets/ball/ball7copia.png');
   this.load.image('paddle', 'assets/paleta0.png');}
  create() { 
 
 
   this.add.image(400,300,'fundo');
+  
 
   player = this.physics.add.sprite(
   400, 
@@ -158,36 +159,10 @@ alvo3 = this.physics.add.group({
     stepX: 70
   }
 });
-alvo4 = this.physics.add.group({
-  key: 'bolinhaVermelha4',
-  repeat: 9,
-  immovable: true,
-  setXY: {
-    x: 80,
-    y: 250,
-    stepX: 70
-  }
-});
-alvo5 = this.physics.add.group({
-  key: 'bolinhaVermelha5',
-  repeat: 9,
-  immovable: true,
-  setXY: {
-    x: 80,
-    y: 300,
-    stepX: 70
-  }
-});
-alvo6 = this.physics.add.group({
-  key: 'bolinhaVermelha6',
-  repeat: 9,
-  immovable: true,
-  setXY: {
-    x: 80,
-    y: 350,
-    stepX: 70
-  }
-});
+
+
+
+
 
 cursors = this.input.keyboard.createCursorKeys();
 player.setCollideWorldBounds(true);
@@ -198,9 +173,9 @@ this.physics.add.collider(ball, alvo0, bater0, null, this);
 this.physics.add.collider(ball, alvo1, bater0, null, this);
 this.physics.add.collider(ball, alvo2, bater0, null, this);
 this.physics.add.collider(ball, alvo3, bater0, null, this);
-this.physics.add.collider(ball, alvo4, bater0, null, this);
-this.physics.add.collider(ball, alvo5, bater0, null, this);
-this.physics.add.collider(ball, alvo6, bater0, null, this);
+
+
+
 
 
 
@@ -220,18 +195,43 @@ texto = this.add.text(
   
 );
 
-texto.setOrigin(0.5);}
+texto.setOrigin(0.5);
+
+
+texto1 = this.add.text(
+  this.physics.world.bounds.width / 2,
+  this.physics.world.bounds.height / 2,
+  'JOGO ENCERRADO',
+  {
+    fontFamily: 'times roman',
+    fontSize: '50px',
+    fill: '#fff'
+  }
+);
+texto1.setOrigin(0.5);
+texto1.setVisible(false);
+texto2 = this.add.text(
+  this.physics.world.bounds.width / 2,
+  this.physics.world.bounds.height / 2,
+  'VOCÊ VENCEU!',
+  {
+    fontFamily: 'times roman',
+    fontSize: '50px',
+    fill: '#fff'
+  }
+);
+texto2.setOrigin(0.5);
+texto2.setVisible(false);}
+ 
 update (){
-      
-  if (jogoEncerrado(this.physics.world)) {
+      if (jogoEncerrado(this.physics.world)) {
+    texto1.setVisible(true);
+    ball.disableBody(true, true);
+}else if (jogoConcluido()) {
+           texto2.setVisible(true);
+           ball.disableBody(true, true);
+  } else  {
     
-    
-  } else if (jogoConcluido()) {
-    
-  } else {
-    
-
-
     player.body.setVelocityX(0);
 
     if (cursors.left.isDown) {
@@ -243,31 +243,20 @@ update (){
       ball.setX(player.x);
     
       if (cursors.space.isDown) {
+        
         inicioDeJogo = true;
-        ball.setVelocityY(-230);
-        texto.setVisible(false);
+        ball.setVelocityY(-280);
         
-        
-      }
-    }
-      }
-    }
-}//fim Scene4
+        texto.setVisible(false);} } } }
+}//fim Scene3
  function jogoEncerrado(mundo) {
     return ball.body.y > mundo.bounds.height;
-    
-       
-         
-   
-          
-
- }
-  function jogoConcluido() {
-    return alvo0.countActive() + alvo1.countActive() + alvo2.countActive() + alvo3.countActive() + alvo4.countActive() 
-    + alvo5.countActive() + alvo6.countActive() === 0;
+}
+ function jogoConcluido() {
+    return  alvo0.countActive() + alvo1.countActive() + alvo2.countActive() + alvo3.countActive()   === 0;
   }
-  function bater0(bolinha0, bolinha1) {
-    bolinha1.disableBody(false, true);
+function bater0(bolinha0, bolinha1) {
+    bolinha1.disableBody(true, true);
   
     if (bolinha0.body.velocity.x === 0) {
       randNum = Math.random();
@@ -278,15 +267,32 @@ update (){
       }
     }
   }
-  function bater1(bolinha, jogador) {
-    
+function bater1(bolinha, jogador) {
     bolinha.setVelocityY(bolinha.body.velocity.y -0);
-  
     let newXVelocity = Math.abs(bolinha.body.velocity.x) +0;
-    
     if (bolinha.x < jogador.x) {
       bolinha.setVelocityX(-newXVelocity);
     } else {
       bolinha.setVelocityX(newXVelocity);
     }
   }
+
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ":" + seconds;
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+  }
+  window.onload = function () {
+    var duration = 60 * 5; 
+        display = document.querySelector('.timer'); 
+    startTimer(duration, display); 
+  };
+  
