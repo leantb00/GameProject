@@ -17,7 +17,7 @@ window.addEventListener('load', ()=>{
 
      game = new Phaser.Game(config);
   })// fim load listener
-  let dude,cursors, player, ball, alvo0, alvo1, alvo2,texto,texto1,texto2,music
+  let dude,cursors, player, ball, alvo0, alvo1, alvo2,alvo3,texto,texto1,texto2,music
   let inicioDeJogo = false;
 
   
@@ -59,7 +59,7 @@ window.addEventListener('load', ()=>{
          super('scene2');
      }
       preload() {
-        this.load.image('oi3', '../assets/scene3.jpg');
+        this.load.image('oi3', '../assets/Scene3.png');
       }//fim preload 
      create(){
          this.add.image(400,300,'oi3');
@@ -79,6 +79,7 @@ window.addEventListener('load', ()=>{
     this.load.image('bolinhaVermelha0', 'assets/ball/ball0copia.png');
     this.load.image('bolinhaVermelha1', 'assets/ball/ball1copia.png');
     this.load.image('bolinhaVermelha2', 'assets/ball/ball2copia.png');
+    this.load.image('bolinhaVermelha3', 'assets/ball/ball3copia.png');
     this.load.image('ball', 'assets/ball/ball7copia.png');
     this.load.image('paddle', 'assets/paleta0.png');
     }
@@ -131,6 +132,16 @@ window.addEventListener('load', ()=>{
       stepX: 70
     }
   });
+  alvo3 = this.physics.add.group({
+    key: 'bolinhaVermelha3',
+    repeat: 9,
+    immovable: true,
+    setXY: {
+      x: 80,
+      y: 200,
+      stepX: 70
+    }
+  });
   
   cursors = this.input.keyboard.createCursorKeys();
   player.setCollideWorldBounds(true);
@@ -140,7 +151,7 @@ window.addEventListener('load', ()=>{
   this.physics.add.collider(ball, alvo0, bater0, null, this);
   this.physics.add.collider(ball, alvo1, bater0, null, this);
   this.physics.add.collider(ball, alvo2, bater0, null, this);
-  
+  this.physics.add.collider(ball, alvo3, bater0, null, this);
   player.setImmovable(true);
   this.physics.add.collider(ball, player, bater1, null, this);
   texto = this.add.text(
@@ -161,7 +172,7 @@ window.addEventListener('load', ()=>{
   texto1 = this.add.text(
     this.physics.world.bounds.width / 2,
     this.physics.world.bounds.height / 2,
-    'JOGO ENCERRADO!',
+    'O MUNDO FOI DESTRUÍDO!',
     {
       fontFamily: 'times roman',
       fontSize: '50px',
@@ -176,7 +187,7 @@ window.addEventListener('load', ()=>{
   texto2 = this.add.text(
     this.physics.world.bounds.width / 2,
     this.physics.world.bounds.height / 2,
-    'VOCÊ VENCEU!',
+    'O MUNDO FOI SALVO!',
     {
       fontFamily: 'times roman',
       fontSize: '50px',
@@ -200,10 +211,12 @@ window.addEventListener('load', ()=>{
           texto1.setVisible(true);
           player.destroy();
           music.stop();
+          
      }else if (jogoConcluido()) {
              texto2.setVisible(true);
              ball.disableBody(true, true);
              player.destroy();
+             music.stop();
     } else  {
       
       player.body.setVelocityX(0);
@@ -228,7 +241,7 @@ window.addEventListener('load', ()=>{
     return ball.body.y > mundo.bounds.height }
    
   function jogoConcluido() {
-      return  alvo0.countActive() + alvo1.countActive() + alvo2.countActive()   === 0;
+      return  alvo0.countActive() + alvo1.countActive() + alvo2.countActive() + alvo3.countActive()  === 0;
     }
   function bater0(bolinha0, bolinha1) {
       bolinha1.disableBody(true, true);
