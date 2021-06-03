@@ -27,7 +27,7 @@ window.addEventListener('load', ()=>{
      }
       
      preload() {
-         this.load.image('oi0', '../assets/photo0.jpg');
+         this.load.image('oi0', '../assets/photo0.png');
     }// fim preload
      
      create(){
